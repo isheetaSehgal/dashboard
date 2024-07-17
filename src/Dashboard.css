@@ -1,0 +1,6 @@
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: rgb(163, 233, 116);
+  }

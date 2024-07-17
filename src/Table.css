@@ -1,0 +1,45 @@
+.table-container {
+    overflow-x: auto;
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .custom-table th {
+    cursor: pointer;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .expanded-row td {
+    background-color: #438610;
+  }
+  
+  .nested-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .nested-table th,
+  .nested-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+  }
+  
+  button {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
