@@ -5,6 +5,7 @@ const Table = ({ data, columns, id }) => {
   const [collapsedRows, setCollapsedRows] = useState({});
   const [hiddenColumns, setHiddenColumns] = useState([]);
   const [nestedData, setNestedData] = useState({});
+  const [nestedCollapsedRows, setNestedCollapsedRows] = useState({});
 
   const toggleRow = (rowIndex) => {
     setCollapsedRows((prev) => ({
@@ -28,6 +29,25 @@ const Table = ({ data, columns, id }) => {
         ...(prev[rowIndex] || []),
         { detail1: 'Team Lead', detail2: 'Task', detail3: 'Detail' },
       ],
+    }));
+  };
+
+  const toggleNestedRow = (rowIndex, nestedRowIndex) => {
+    setNestedCollapsedRows((prev) => ({
+      ...prev,
+      [rowIndex]: {
+        ...prev[rowIndex],
+        [nestedRowIndex]: !prev[rowIndex]?.[nestedRowIndex],
+      },
+    }));
+  };
+
+  const handleStatusChange = (rowIndex, nestedRowIndex, status) => {
+    setNestedData((prev) => ({
+      ...prev,
+      [rowIndex]: prev[rowIndex].map((row, index) =>
+        index === nestedRowIndex ? { ...row, status } : row
+      ),
     }));
   };
 
@@ -67,18 +87,36 @@ const Table = ({ data, columns, id }) => {
                     <table className="nested-table">
                       <thead>
                         <tr>
-                          <th>Team Manager</th>
+                        <th>Team Manager</th>
                           <th>Task</th>
-                          <th>Detail</th>
+                         <th>Detail</th>
                         </tr>
                       </thead>
                       <tbody>
                         {(nestedData[rowIndex] || []).map((nestedRow, nestedIndex) => (
-                          <tr key={nestedIndex}>
-                            <td>{nestedRow.detail1}</td>
-                            <td>{nestedRow.detail2}</td>
-                            <td>{nestedRow.detail3}</td>
-                          </tr>
+                          <React.Fragment key={nestedIndex}>
+                            <tr onClick={() => toggleNestedRow(rowIndex, nestedIndex)}>
+                              <td>{nestedRow.detail1}</td>
+                              <td>{nestedRow.detail2}</td>
+                              <td>{nestedRow.detail3}</td>
+                            </tr>
+                            {nestedCollapsedRows[rowIndex]?.[nestedIndex] && (
+                              <tr className="expanded-row">
+                                <td colSpan={3}>
+                                  <select
+                                    value={nestedRow.status || 'pending'}
+                                    onChange={(e) =>
+                                      handleStatusChange(rowIndex, nestedIndex, e.target.value)
+                                    }
+                                  >
+                                    <option value="pending">Pending</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="completed">Completed</option>
+                                  </select>
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
                         ))}
                       </tbody>
                     </table>
@@ -94,3 +132,4 @@ const Table = ({ data, columns, id }) => {
 };
 
 export default Table;
+
